@@ -1,0 +1,28 @@
+title: Powerlessshell msbuild.exe renamed to something else
+status: Production
+description: 
+- process masquerading to avoid detection 
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: medium
+tags:
+    - attack.defenseevasion
+    - attack.T1036.003
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Description:
+    - 'MSBuild.exe'
+  msbuild_real: 
+    Image:
+    - '*msbuild.exe*'
+  condition: selection and not msbuild_real

@@ -1,0 +1,28 @@
+title: InvisiShell powershell loading unknown dll
+status: Production
+description: Detects when the unknown dll is loaded by PowerShell
+references: 
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+author: tas_kmanager
+date: 2020/08/04
+falsepositives: 
+- none
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection: 
+      ImageLoaded: '*.dll*'
+      EventID: 7
+      Image: '*powershell.exe*'
+    high_priv_folder1:
+      Image: '*SysWOW64*'
+    high_priv_folder2:
+     Image: '*System32*'
+    microsoft:
+      Company: 'Microsoft Corporation'
+    condition: selection and not microsoft or selection and not high_priv_folder1 and not high_priv_folder2 

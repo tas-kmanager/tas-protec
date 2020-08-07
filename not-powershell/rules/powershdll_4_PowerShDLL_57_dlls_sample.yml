@@ -1,0 +1,32 @@
+title: Powershdll loader binaries loading powershell dll
+status: Production
+description: 
+- Detects when the five loader binaries is loading 57 of the powershdll dlls, you will need to create the other 56 dlls detection and correlate everything. use this rule as sample.
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 7
+    Image:
+    - '*rundl32.exe*'
+    - '*installutil.exe*'
+    - '*regsvcs.exe*'
+    - '*regasm.exe*'
+    - '*regsvr32*'
+  dll:
+    ImageLoaded:
+    - '*msvcr80.dll'
+  condition: selection and dll

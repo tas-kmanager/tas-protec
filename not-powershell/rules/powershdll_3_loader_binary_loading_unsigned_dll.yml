@@ -1,0 +1,38 @@
+title: Powershdll/Nopowershell dll loaders loading unsigned dll
+status: Production
+description: Detects the 5 loaders trying to load unsigned dlls
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- medium
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1218
+    - attack.T1218.011
+    - attack.T1218.004
+    - attack.T1218.009
+    - attack.T1218.010                
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 7
+    Image:
+    - '*rundl32.exe*'
+    - '*installutil.exe*'
+    - '*regsvcs.exe*'
+    - '*regasm.exe*'
+    - '*regsvr32*'
+  signed:
+    Signed:
+    - 'false'
+  sign_status:
+    SignatureStatus:
+    - 'Unavailable'
+  condition: selection and signed or selection and sign_status

@@ -1,0 +1,27 @@
+title: InvisiShell Registry Set Value Event
+description: Sysmon event id 13 will record changes in the rehistry key. We are watching for changes in InprocServer32 registry with value of dll
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1548.002
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 13
+    Image:
+    - reg.exe
+    TargetObject:
+    - '*InprocServer32*'
+    Details:
+    - '*.dll*'
+  condition: selection

@@ -1,0 +1,26 @@
+title: Powerlessshell renamed msbuild.exe is loading microsoft build dll 
+status: Production
+description: 
+- there might be FP if the server monitored are .NET development server that is using real msbuild.exe
+- whitelist real msbuild.exe or use the rule as indicator instead
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- medium
+level: medium
+tags:
+    - attack.defenseevasion
+    - attack.T1127.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 7
+    Description:
+    - 'Microsoft.Build.Tasks.v4.0.dll'
+  condition: selection

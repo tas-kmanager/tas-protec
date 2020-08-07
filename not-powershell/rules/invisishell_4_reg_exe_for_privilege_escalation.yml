@@ -1,0 +1,38 @@
+title: InvisiShell Reg.exe execution to change registry key value
+description: look for reg.exe changing specific registry keys, which is inprocserver32 registry. Check also if the value set is containing dll.
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1548.002
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image:
+    - reg.exe
+    CommandLine:
+    - '*InprocServer32 /ve /t REG_SZ /d*'
+    ParentCommandLine:
+    - '*.exe*'
+  dll_as_value:  
+    CommandLine:
+    - '*.dll*'
+  parent_script_extension:  
+    ParentCommandLine:
+    - '*.bat*'
+    - '*.sh*'
+    - '*.py*'
+    - '*.com*'
+    - '*.cmd*'
+    - '*.btm*'
+  condition: selection and parent_script_extension and dll_as_value

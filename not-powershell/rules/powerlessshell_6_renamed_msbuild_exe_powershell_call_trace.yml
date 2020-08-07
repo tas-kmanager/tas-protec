@@ -1,0 +1,29 @@
+title: Powerlessshell renamed msbuild.exe powershell call trace 
+status: Production
+description: 
+- the renamed msbuild.exe is interacting with System.Management.Automation.ni.dll, the main module of PowerShell.
+- can be seen from Sysmon Call trace event (id 10)
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- medium
+level: medium
+tags:
+    - attack.defenseevasion
+    - attack.T1127.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 10
+    Description:
+    - '*System.Management.Automation.ni.dll*'
+  ps:
+    SourceImage: 
+    - 'powershell.exe'
+  condition: selection and not ps

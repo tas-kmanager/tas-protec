@@ -1,0 +1,27 @@
+title: Powerlessshell certutil decodehex
+status: Production
+description: 
+- Powerlessshell detection when it's decoding the payload using certutil
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1140
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Description:
+    - 'CertUtil.exe'
+    CommandLine:
+    - '*-decodehex*'
+  condition: selection

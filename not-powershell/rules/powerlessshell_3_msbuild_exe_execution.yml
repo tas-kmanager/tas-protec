@@ -1,0 +1,30 @@
+title: Powerlessshell msbuild.exe execution
+status: Production
+description: 
+- Powerlessshell detection when it's decoding the payload using certutil
+- You will need to apply regex here (e.g. .keyword on Elastic)
+- Random letters both upper and lower case, between 5 to 25 characters
+- change the regex value to .*[A-Za-z]{5,25}.* once converted 
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1127.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Description:
+    - 'MSBuild.exe'
+    CommandLine:
+    - '*[A-Za-z]{5,25}*'
+  condition: selection

@@ -1,0 +1,31 @@
+title: Cobalt Strike Olaf's Detection
+status: Production
+description: 
+- Powershell will create a remote thread on svchost.exe with target start address always ends with 0B80
+- can be seen from Sysmon create remote thread event (id 8)
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+- credit to Olaf Hartong medium.com/@olafhartong/cobalt-strike-remote-threads-detection-206372d11d0f
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1127.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 8
+    StartAddress:
+    - '*0B80'
+    SourceImage:
+    - 'powershell.exe'
+    TargetImage:
+    - 'svchost.exe'
+  condition: selection

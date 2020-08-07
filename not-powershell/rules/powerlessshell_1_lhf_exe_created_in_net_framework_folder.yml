@@ -1,0 +1,31 @@
+title: Powerlessshell lhf new exe created in .NET framework folder
+status: Production
+description: 
+- Detects when Powerlessshell created new exe file in the .NET framework folder (Windows\Microsoft.NET\Framework\)
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+    - attack.T1027.004
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 11
+    Image:
+    - '*rundl32.exe*'
+    TargetFilename:
+    - '*Windows\Microsoft.NET\Framework\*'
+  exe:
+    TargetFilename:
+    - '*.exe'
+  condition: selection and exe

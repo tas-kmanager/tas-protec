@@ -1,0 +1,48 @@
+title: Powershdll loader binaries loading powershell dll
+status: Production
+description: Detects when the five loader binaries is loading PowerShell related dlls
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- low
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1218
+    - attack.T1218.011
+    - attack.T1218.004
+    - attack.T1218.009
+    - attack.T1218.010  
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 7
+    Image:
+    - '*rundl32.exe*'
+    - '*installutil.exe*'
+    - '*regsvcs.exe*'
+    - '*regasm.exe*'
+    - '*regsvr32*'
+  dll:
+    ImageLoaded:
+    - '*Microsoft.PowerShell.Security.ni.dll'
+    - '*Microsoft.PowerShell.Commands.Utility.ni.dll'
+    - '*System.Management.Automation.ni.dll'
+    - '*Microsoft.PowerShell.Commands.Diagnostics.ni.dll'
+    - '*Microsoft.PowerShell.ConsoleHost.ni.dll'
+    - '*Microsoft.PowerShell.Commands.Management.ni.dll'
+  description:
+    Description:
+    - 'Microsoft Windows PowerShell Management Commands'
+    - 'Microsoft Windows PowerShell Utility Commands'
+    - 'Microsoft Windows PowerShell Management Commands'
+    - 'Microsoft PowerShell Commands Diagnostics'
+    - 'Microsoft.PowerShell.ConsoleHost'
+    - 'System.Management.Automation'
+  condition: selection and dll or selection and description

@@ -1,0 +1,31 @@
+title: Powershdll LHF basic information 
+status: Production
+description: Detects the default name and product name of the exe
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- none
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+  cmd:
+    CommandLine:
+    - '*powershdll.exe*'
+  description:
+    Description:
+    - '*PowerShdll*'
+  product:
+    product:
+    - 'PowerShdll'
+  condition: selection or cmd and selection or description and selection or product

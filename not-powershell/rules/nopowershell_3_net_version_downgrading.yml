@@ -1,0 +1,28 @@
+title: nopowershell .NET framework version downgrading
+status: Production
+description: 
+- nopowershell will force the victim machine to downgrade the .net version down to version 2/3.5
+- will trigger specific sysmon event id 1
+- legitimate application might do this
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+falsepositives:
+- medium
+level: medium
+tags:
+    - attack.defenseevasion
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image:
+    - 'fondue.exe'
+    CommandLine:
+    - '/enable-feature:NetFx3 /caller-name:mscoreei.dll'
+  condition: selection

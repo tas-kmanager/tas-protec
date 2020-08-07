@@ -1,0 +1,25 @@
+title: InvisiShell powershell loading unsigned dll
+status: Production
+description: Detects when the unsigned dll is loaded by PowerShell
+references: 
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+author: tas_kmanager
+date: 2020/08/04
+falsepositives: 
+- none
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection: 
+      ImageLoaded: '*.dll*'
+      EventID: 7
+      Image: '*powershell.exe*'
+    signature:
+      Signed: 'false'
+      SignatureStatus: 'Unavailable'
+    condition: selection and not signature

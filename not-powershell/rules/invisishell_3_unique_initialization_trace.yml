@@ -1,0 +1,37 @@
+title: InvisiShell Unique Initialization Trace
+description: Initialization Command line will always contain JUST “powershell” (with no cmdlets), will launched by executable with .bat as parameters
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+detection:
+  condition: selection
+falsepositives:
+- none
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    Image:
+    - powershell.exe
+    CommandLine:
+    - powershell
+    ParentCommandLine:
+    - '*.exe*'
+  script_extension:  
+    ParentCommandLine:
+    - '*.bat*'
+    - '*.sh*'
+    - '*.py*'
+    - '*.com*'
+    - '*.cmd*'
+    - '*.btm*'
+  condition: selection and script_extension

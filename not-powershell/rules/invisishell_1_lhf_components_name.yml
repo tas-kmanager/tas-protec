@@ -1,0 +1,41 @@
+action: global
+title: InvisiShell LHF Components Name
+status: Production
+description: Detects the 3 file names that are part of invishell operation; two bat files and one dll file name
+references:
+- tas_kmanager's detecting the not-powershell gang defcon 28 btv presentation, https://github.com/tas-kmanager/SecurityPresentation/tree/master/DetectingTheNotPowershellGang
+logsource:
+  product: windows
+author: tas_kmanager
+date: 2020/08/04
+detection:
+  condition: selection
+falsepositives:
+- none
+level: high
+tags:
+    - attack.defenseevasion
+    - attack.T1055.001
+---
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 1
+    CommandLine:
+    - RunWithPathAsAdmin.bat
+    - RunWithRegistryNonAdmin.bat
+    - InvisiShellProfiler.dll
+---
+logsource:
+  product: windows
+  service: security
+  description: 'Requirements: Audit Policy : Detailed Tracking > Audit Process creation, Group Policy : Administrative Templates\System\Audit Process Creation'
+detection:
+  selection:
+    EventID: 4688
+    ProcessCommandLine:
+    - RunWithPathAsAdmin.bat
+    - RunWithRegistryNonAdmin.bat
+    - InvisiShellProfiler.dll
